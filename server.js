@@ -1,7 +1,3 @@
-// server.js
-// where your node app starts
-
-// init project
 var express = require('express');
 var app = express();
 
@@ -23,6 +19,35 @@ app.get("/", function (req, res) {
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
+
+app.get('/api/timestamp/:date_string?', function(req,res){
+    let now = new Date();
+    let date_string;
+    let response = {};
+
+    if(!req.params.date_string){
+        res.send({unix:now.getTime(),utc:now.toUTCString()});
+        return;
+    }
+
+    date_string = req.params.date_string;
+
+   
+  if(new Date(date_string) != "Invalid Date"){
+        response.unix = new Date(date_string).getTime();
+        response.utc = new Date(date_string).toUTCString();
+        res.send(response);
+  }else
+  
+  if(parseFloat(date_string)){
+    let fDate = parseFloat(date_string);
+    response.unix = new Date(fDate).getTime();
+        response.utc = new Date(fDate).toUTCString();
+        res.send(response);
+  }
+
+  
+})
 
 
 
